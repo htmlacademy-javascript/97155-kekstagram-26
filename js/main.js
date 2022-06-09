@@ -1,7 +1,9 @@
 // Возвращает рандомное число из указанного интервала включительно
 function getRandomInt(min, max) {
-  if (min >= max) {
-    return console.log('Минимальное значение не может быть больше или равно максимальному');
+  if (min > max) {
+    min = Math.floor(min);
+    max = Math.ceil(max);
+    return Math.floor(Math.random() * (min - max + 1)) + max;
   }
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -16,5 +18,5 @@ function checkStringLength(string, limit) {
   return true;
 }
 
-console.log(getRandomInt(1, 10));
-console.log(checkStringLength('Проверка длины строки', 21));
+getRandomInt(10, 10);
+checkStringLength('Проверка длины строки', 21);
