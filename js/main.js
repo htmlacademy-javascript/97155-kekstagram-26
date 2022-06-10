@@ -13,10 +13,6 @@ function getRandomInt(min, max) {
 // Проверяет умещается ли строка в указанный лимит символов
 function checkStringLength(string, limit) {
   return string.length <= limit;
-  // if (string.length > limit) {
-  //   return false;
-  // }
-  // return true;
 }
 
 getRandomInt(10, 1);
