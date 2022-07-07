@@ -1,19 +1,22 @@
 import { creatPhotoDescriptions } from './data.js';
 
+// находим шаблон для одной картинки
 const pictureTemplate = document.querySelector('#picture').content;
-const pictures = creatPhotoDescriptions();
-const pictureUrl  = pictureTemplate.querySelector('.picture__img');
-const pictureLikes  = pictureTemplate.querySelector('.picture__likes');
-const pictureCOmments  = pictureTemplate.querySelector('.picture__comments');
 
+// получаем массив с данными для картинок
+const picturesData = creatPhotoDescriptions();
 
-console.log(test);
+// находим блок в который будем выводить все картинки
+const picturesContainer = document.querySelector('.pictures');
 
-
-console.log(pictureUrl);
 const pictureFragment = document.createDocumentFragment();
 
+picturesData.forEach(({url, likes, comments}) => {
+  const pictureElement = pictureTemplate.cloneNode(true);
+  pictureElement.querySelector('.picture__img').src = url;
+  pictureElement.querySelector('.picture__likes').textContent = likes;
+  pictureElement.querySelector('.picture__comments').textContent = comments.length;
+  pictureFragment.appendChild(pictureElement);
+});
 
-
-console.log(pictureTemplate);
-console.log(pictures);
+picturesContainer.appendChild(pictureFragment);
