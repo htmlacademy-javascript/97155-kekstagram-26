@@ -7,7 +7,7 @@ const commentsLoader = bigPicture.querySelector('.comments-loader');
 const body = document.querySelector('body');
 const comments = bigPicture.querySelector('.social__comments');
 
-// Создает html код комментария
+// cоздает html код комментария
 const getPhotoComments = (commentsArray) => {
   comments.innerHTML = '';
   for (let i = 0; i < commentsArray.length; i++) {
@@ -28,7 +28,7 @@ const getPhotoComments = (commentsArray) => {
   }
 };
 
-// При клике на превью, заполняем данными модальку
+// при клике на маленькую картинку, заполняем данными модалку с большой картинкой
 smallPictures.forEach((picture, index) => {
   picture.addEventListener('click', () => {
     bigPicture.classList.remove('hidden');
@@ -43,14 +43,14 @@ smallPictures.forEach((picture, index) => {
   });
 });
 
-// Закрываем модалку по клику на крестик
+// закрываем модалку по клику на крестик
 const closeButton = document.querySelector('.big-picture__cancel');
 closeButton.addEventListener('click', () => {
   bigPicture.classList.add('hidden');
   body.classList.remove('modal-open');
 });
 
-// Закрываем модалку по нажатию Esc
+// закрываем модалку по нажатию Esc
 document.addEventListener('keydown', (evt) => {
   if (evt.keyCode === 27) {
     bigPicture.classList.add('hidden');
