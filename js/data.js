@@ -78,15 +78,13 @@ const createPhotoComment = () => ({
   name: COMMENT_AUTHOR_NAMES[getRandomInt(0, COMMENT_AUTHOR_NAMES.length - 1)],
 });
 
-const PHOTO_COMMENTS = Array.from({length: 2}, createPhotoComment);
-
 // создает объект описания к фото
 const createPhotoDescription = () => ({
   id: getRandomArrayElement(DESCRIPTION_IDS),
   url: getRandomArrayElement(PHOTO_URLS),
   description: getRandomArrayElement(DESCRIPTIONS),
   likes: getRandomInt(15, 200),
-  comments: PHOTO_COMMENTS
+  comments: Array.from({length: 2}, createPhotoComment)
 });
 
 const creatPhotoDescriptions = () => Array.from({length: PHOTO_DESCRIPTIONS_COUNT}, createPhotoDescription);
