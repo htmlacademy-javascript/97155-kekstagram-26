@@ -37,16 +37,48 @@ const pristine = new Pristine(imageUploadForm, {
   classTo: 'upload-image-form__element',
   errorTextParent: 'upload-image-form__element',
   errorTextClass: 'upload-image-form__error-text',
-});
+}, false);
 
 pristine.addValidator(uploadModalHashteg, (value) => {
   const re = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
+  const hashtegsArray = value.split(' ');
 
-  if (re.test(value)){
-    return true;
+  for (let i = 0; i < hashtegsArray.length; i++) {
+    if (!re.test(hashtegsArray[i])) {
+      return false;
+    }
+  } return true;
+}, 'Не верный формат хештега', 2, false);
+
+pristine.addValidator(uploadModalHashteg, (value) => {
+  const hashtegsArray = value.split(' ');
+
+  if (hashtegsArray.length > 5) {
+    return false;
   }
-  return false;
-}, 'The first character must be capitalized', 2, false);
+  return true;
+
+}, 'Максимум 5 хештегов', 2, false);
+
+const checkUniqHashtegs = (tegs) => {
+  const repeatedTegs = [];
+  tegs.forEach ((element, index) => {
+    for (let i = index + 1; i < tegs.length; i++) {
+      if (element === tegs[i]) {
+        repeatedTegs[index] = element;
+      }
+    }
+  });
+  if (repeatedTegs.length > 0) {
+    return false;
+  }
+  return true;
+};
+
+pristine.addValidator(uploadModalHashteg, (value) => {
+  const hashtegsArray = value.split(' ');
+  return checkUniqHashtegs(hashtegsArray);
+}, 'Все хештеги должны быть уникальными', 2, false);
 
 
 imageUploadForm.addEventListener('submit', (evt) => {
