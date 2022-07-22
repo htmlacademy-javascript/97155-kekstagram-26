@@ -33,54 +33,69 @@ document.addEventListener('keydown', (evt) => {
   }
 });
 
+// не закрываем модлаку по Esc если фокус на инпуте ввода хештега
+uploadModalHashteg.addEventListener('keydown', (evt) => {
+  evt.stopPropagation();
+});
+
+// не закрываем модлаку по Esc если фокус на поле ввода комментария
+uploadModalDescription.addEventListener('keydown', (evt) => {
+  evt.stopPropagation();
+});
+
+// создаем экземпляр валидатора и передаем форму
 const pristine = new Pristine(imageUploadForm, {
   classTo: 'upload-image-form__element',
   errorTextParent: 'upload-image-form__element',
   errorTextClass: 'upload-image-form__error-text',
 }, false);
 
-pristine.addValidator(uploadModalHashteg, (value) => {
-  const re = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
-  const hashtegsArray = value.split(' ');
+// если что то было указано в инпуте хештегов, добавляем валидаторы
+uploadModalHashteg.addEventListener('change', () => {
 
-  for (let i = 0; i < hashtegsArray.length; i++) {
-    if (!re.test(hashtegsArray[i])) {
+  // добавляем валидатор хештегов на соотвествие формату
+  pristine.addValidator(uploadModalHashteg, (value) => {
+    const hashtegsArray = value.split(' ');
+    const re = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
+
+    for (let i = 0; i < hashtegsArray.length; i++) {
+      if (!re.test(hashtegsArray[i])) {
+        return false;
+      }
+    } return true;
+  }, 'Не верный формат хештега', 2, false);
+
+  // добавляем валидатор на количество хештегов
+  pristine.addValidator(uploadModalHashteg, (value) => {
+    const hashtegsArray = value.split(' ');
+
+    if (hashtegsArray.length > 5) {
       return false;
     }
-  } return true;
-}, 'Не верный формат хештега', 2, false);
+    return true;
+  }, 'Максимум 5 хештегов', 2, false);
 
-pristine.addValidator(uploadModalHashteg, (value) => {
-  const hashtegsArray = value.split(' ');
+  // добавляем валидатор уникальности хештегов
+  pristine.addValidator(uploadModalHashteg, (value) => {
+    const hashtegsArray = value.split(' ');
+    const repeatedTegs = [];
 
-  if (hashtegsArray.length > 5) {
-    return false;
-  }
-  return true;
-
-}, 'Максимум 5 хештегов', 2, false);
-
-const checkUniqHashtegs = (tegs) => {
-  const repeatedTegs = [];
-  tegs.forEach ((element, index) => {
-    for (let i = index + 1; i < tegs.length; i++) {
-      if (element === tegs[i]) {
-        repeatedTegs[index] = element;
+    hashtegsArray.forEach ((element, index) => {
+      for (let i = index + 1; i < hashtegsArray.length; i++) {
+        if (element.toLowerCase() === hashtegsArray[i].toLowerCase()) {
+          repeatedTegs[index] = element;
+        }
       }
+    });
+
+    if (repeatedTegs.length > 0) {
+      return false;
     }
-  });
-  if (repeatedTegs.length > 0) {
-    return false;
-  }
-  return true;
-};
+    return true;
+  }, 'Все хештеги должны быть уникальными', 2, false);
+});
 
-pristine.addValidator(uploadModalHashteg, (value) => {
-  const hashtegsArray = value.split(' ');
-  return checkUniqHashtegs(hashtegsArray);
-}, 'Все хештеги должны быть уникальными', 2, false);
-
-
+// отключаем отправку формы по умолчанию и включаем отправку, если пройдена валидация
 imageUploadForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
   const isValid = pristine.validate();
