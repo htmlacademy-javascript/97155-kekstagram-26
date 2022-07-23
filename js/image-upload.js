@@ -63,7 +63,7 @@ uploadModalHashteg.addEventListener('change', () => {
         return false;
       }
     } return true;
-  }, 'Не верный формат хештега', 2, false);
+  }, 'Не верный формат хештега', 3, true);
 
   // добавляем валидатор на количество хештегов
   pristine.addValidator(uploadModalHashteg, (value) => {
@@ -73,7 +73,7 @@ uploadModalHashteg.addEventListener('change', () => {
       return false;
     }
     return true;
-  }, 'Максимум 5 хештегов', 2, false);
+  }, 'Максимум 5 хештегов', 1, true);
 
   // добавляем валидатор уникальности хештегов
   pristine.addValidator(uploadModalHashteg, (value) => {
@@ -92,12 +92,13 @@ uploadModalHashteg.addEventListener('change', () => {
       return false;
     }
     return true;
-  }, 'Все хештеги должны быть уникальными', 2, false);
+  }, 'Все хештеги должны быть уникальными', 2, true);
 });
 
 // отключаем отправку формы по умолчанию и включаем отправку, если пройдена валидация
 imageUploadForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
+  pristine.reset();
   const isValid = pristine.validate();
   if (isValid) {
     imageUploadForm.submit();
