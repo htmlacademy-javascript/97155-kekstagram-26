@@ -5,6 +5,7 @@ const body = document.querySelector('body');
 const uploadModalCloseButton = document.querySelector('.img-upload__cancel');
 const uploadModalHashteg = document.querySelector('.text__hashtags');
 const uploadModalDescription = document.querySelector('.text__description');
+const imagePreview = document.querySelector('.img-upload__preview');
 
 // открываем модалку редактирования изображения
 uploadInput.addEventListener('change', () => {
@@ -19,6 +20,7 @@ const closeUploadModal = () => {
   uploadInput.value = '';
   uploadModal.classList.add('hidden');
   body.classList.remove('modal-open');
+  imagePreview.className = 'img-upload__preview';
 };
 
 // закрываем модалку редактирования изображения по клику на крестик
@@ -104,3 +106,5 @@ imageUploadForm.addEventListener('submit', (evt) => {
     imageUploadForm.submit();
   }
 });
+
+export { imagePreview };

@@ -3,13 +3,14 @@ const buttonPlus = document.querySelector('.scale__control--bigger');
 const scaleValue = document.querySelector('.scale__control--value');
 const imagePreview = document.querySelector('.img-upload__preview');
 const scaleStep = 25;
-
+const minScale = 25;
+const maxScale = 100;
 
 buttonMinus.addEventListener('click', () => {
   buttonPlus.disabled = false;
   const currentScale = Number(scaleValue.value.replace(/%/, ''));
 
-  if (currentScale === 50) {
+  if (currentScale === minScale + scaleStep) {
     buttonMinus.disabled = true;
   }
 
@@ -21,7 +22,7 @@ buttonPlus.addEventListener('click', () => {
   buttonMinus.disabled = false;
   const currentScale = Number(scaleValue.value.replace(/%/, ''));
 
-  if (currentScale === 75) {
+  if (currentScale === maxScale - scaleStep) {
     buttonPlus.disabled = true;
   }
 
