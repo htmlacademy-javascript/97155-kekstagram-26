@@ -1,3 +1,6 @@
+import { sendData } from './api.js';
+import { showAlert } from './util.js';
+
 const imageUploadForm = document.querySelector('.img-upload__form');
 const uploadModal = document.querySelector('.img-upload__overlay');
 const uploadInput = document.querySelector('.img-upload__input');
@@ -6,6 +9,7 @@ const uploadModalCloseButton = document.querySelector('.img-upload__cancel');
 const uploadModalHashteg = document.querySelector('.text__hashtags');
 const uploadModalDescription = document.querySelector('.text__description');
 const imagePreview = document.querySelector('.img-upload__preview');
+const submitButton = document.querySelector('.img-upload__submit');
 
 // открываем модалку редактирования изображения
 uploadInput.addEventListener('change', () => {
@@ -97,14 +101,37 @@ uploadModalHashteg.addEventListener('change', () => {
   }, 'Все хештеги должны быть уникальными', 2, true);
 });
 
-// отключаем отправку формы по умолчанию и включаем отправку, если пройдена валидация
-imageUploadForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  pristine.reset();
-  const isValid = pristine.validate();
-  if (isValid) {
-    imageUploadForm.submit();
-  }
-});
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = 'Публикую...';
+};
 
-export { imagePreview };
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = 'Опубликовать';
+};
+
+// отключаем отправку формы по умолчанию и включаем отправку, если пройдена валидация
+const setUploadFormSubmit = (onSuccess) => {
+  imageUploadForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    pristine.reset();
+    const isValid = pristine.validate();
+    if (isValid) {
+      blockSubmitButton();
+      sendData(
+        () => {
+          onSuccess();
+          unblockSubmitButton();
+        },
+        () => {
+          showAlert('Не удалось отправить форму. Попробуйте ещё раз');
+          unblockSubmitButton();
+        },
+        new FormData(evt.target),
+      );
+    }
+  });
+};
+
+export { imagePreview, setUploadFormSubmit, closeUploadModal };

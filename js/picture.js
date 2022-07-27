@@ -1,29 +1,27 @@
-import { creatPhotoDescriptions } from './data.js';
+const renderPictures = (picturesData) => {
+  // находим шаблон для одной картинки
+  const pictureTemplate = document.querySelector('#picture').content;
 
-// находим шаблон для одной картинки
-const pictureTemplate = document.querySelector('#picture').content;
+  // находим блок в который будем выводить все картинки
+  const picturesContainer = document.querySelector('.pictures');
 
-// получаем массив с данными для картинок
-const picturesData = creatPhotoDescriptions();
+  const pictureFragment = document.createDocumentFragment();
 
-// находим блок в который будем выводить все картинки
-const picturesContainer = document.querySelector('.pictures');
+  // создает элемент превью картинки
+  const getPictureElement = (url, likes, comments) => {
+    const pictureElement = pictureTemplate.cloneNode(true);
+    pictureElement.querySelector('.picture__img').src = url;
+    pictureElement.querySelector('.picture__likes').textContent = likes;
+    pictureElement.querySelector('.picture__comments').textContent = comments.length;
+    pictureFragment.appendChild(pictureElement);
+  };
 
-const pictureFragment = document.createDocumentFragment();
+  picturesData.forEach(({url, likes, comments}) => {
+    getPictureElement(url, likes, comments);
+  });
 
-// создает элемент превью картинки
-const getPictureElement = (url, likes, comments) => {
-  const pictureElement = pictureTemplate.cloneNode(true);
-  pictureElement.querySelector('.picture__img').src = url;
-  pictureElement.querySelector('.picture__likes').textContent = likes;
-  pictureElement.querySelector('.picture__comments').textContent = comments.length;
-  pictureFragment.appendChild(pictureElement);
+  picturesContainer.appendChild(pictureFragment);
+
 };
 
-picturesData.forEach(({url, likes, comments}) => {
-  getPictureElement(url, likes, comments);
-});
-
-picturesContainer.appendChild(pictureFragment);
-
-export { picturesData };
+export { renderPictures };
