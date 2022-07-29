@@ -1,5 +1,4 @@
 import { renderBigPicture } from './big-picture.js';
-import { getRandomInt } from './util.js';
 
 const renderPictures = (picturesData) => {
   // находим шаблон для одной картинки
@@ -7,6 +6,11 @@ const renderPictures = (picturesData) => {
 
   // находим блок в который будем выводить все картинки
   const picturesContainer = document.querySelector('.pictures');
+
+  const currentImages = picturesContainer.querySelectorAll('.picture');
+  for( let i = 0; i < currentImages.length; i++ ){
+    currentImages[i].outerHTML = '';
+  }
 
   const pictureFragment = document.createDocumentFragment();
 
@@ -25,38 +29,38 @@ const renderPictures = (picturesData) => {
 
   picturesContainer.appendChild(pictureFragment);
 
+  renderBigPicture(picturesData);
+
   //показываем фильтры картинок
   const imageFilters = document.querySelector('.img-filters');
   imageFilters.classList.remove('img-filters--inactive');
 
-  const filterRandom = document.querySelector('#filter-random');
-
-  // возвращает массив из 10 случайных картинок
-  const getRandomElements = (elements) => {
-    const newElements = [];
-    for (let i = 1; i <= 10; i++) {
-      const currentElement = elements[getRandomInt(0, elements.length - 1)];
-      const elementIndex = elements.indexOf(currentElement);
-      elements.splice(elementIndex, 1);
-      newElements.push(currentElement);
-    }
-    return newElements;
-  };
-
-  // по клику на кнопку фильтра очищаем текущий список картинок из генерируем новый список из 10ти случайных
-  filterRandom.addEventListener('click', () => {
-    const currentImages = picturesContainer.querySelectorAll('.picture');
-    for( let i = 0; i < currentImages.length; i++ ){
-      currentImages[i].outerHTML = '';
-    }
-
-    const filteredImages = getRandomElements(picturesData);
-
-    renderPictures(filteredImages);
-    renderBigPicture(filteredImages);
-
-  });
-
 };
 
-export { renderPictures };
+// находим кнопки переключения фильтров
+const filterDefault = document.querySelector('#filter-default');
+const filterRandom = document.querySelector('#filter-random');
+const filterDiscussed = document.querySelector('#filter-discussed');
+
+const setFilterDefaultClick = (cb) => {
+  filterDefault.addEventListener('click', () => {
+    cb();
+  });
+};
+
+// по клику на фильтр Случайные очищаем текущий список картинок и генерируем новый список из 10ти случайных
+const setFilterRandomClick = (cb) => {
+  filterRandom.addEventListener('click', () => {
+    cb();
+  });
+};
+
+// по клику на фильтр Обсуждаемые очищаем текущий список картинок и показываем отсортированные по комментариям
+const setFilterDiscussedClick = (cb) => {
+  filterDiscussed.addEventListener('click', () => {
+    cb();
+  });
+};
+
+
+export { renderPictures, setFilterRandomClick, setFilterDiscussedClick, setFilterDefaultClick };
