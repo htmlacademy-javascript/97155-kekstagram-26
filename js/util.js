@@ -39,4 +39,49 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
-export { getRandomInt, showAlert };
+// возвращает массив из 10 случайных картинок
+const getRandomElements = (elements) => {
+  const elementsCopy = elements.slice();
+  const newElements = [];
+  for (let i = 1; i <= 10; i++) {
+    const currentElement = elementsCopy[getRandomInt(0, elementsCopy.length - 1)];
+    const elementIndex = elementsCopy.indexOf(currentElement);
+    elementsCopy.splice(elementIndex, 1);
+    newElements.push(currentElement);
+  }
+  return newElements;
+};
+
+// сортирует переданный массив в порядке убывания количества комментариев
+const getSortElements = (elements) => {
+  const newElements = elements.slice();
+  newElements.sort((element1, element2) => {
+    if (element1.comments.length < element2.comments.length) {
+      return 1;
+    }
+    if (element1.comments.length > element2.comments.length) {
+      return -1;
+    }
+    return 0;
+  });
+  return newElements;
+};
+
+// выделяет активный фильтр
+const getActiveFilter = () => {
+  const filterDefault = document.querySelector('#filter-default');
+  const filterRandom = document.querySelector('#filter-random');
+  const filterDiscussed = document.querySelector('#filter-discussed');
+  const filtersForm = document.querySelector('.img-filters__form');
+
+  filtersForm.addEventListener('click', (evt) => {
+    filterDefault.className = 'img-filters__button';
+    filterRandom.className = 'img-filters__button';
+    filterDiscussed.className = 'img-filters__button';
+    evt.target.classList.add('img-filters__button--active');
+  });
+};
+
+export { getRandomInt, showAlert, getRandomElements, getSortElements, getActiveFilter };
+
+
