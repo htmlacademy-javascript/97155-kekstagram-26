@@ -11,13 +11,14 @@ import './image-upload-filters.js';
 import { getRandomElements } from './util.js';
 import { getSortElements } from './util.js';
 import { getActiveFilter } from './util.js';
+import { debounce } from './util.js';
 
 // получаем данные о картинках с сервера
 getData((images) => {
   renderPictures(images);
-  setFilterDefaultClick(() => renderPictures(images));
-  setFilterRandomClick(() => renderPictures(getRandomElements(images)));
-  setFilterDiscussedClick(() => renderPictures(getSortElements(images)));
+  setFilterDefaultClick(debounce(() => renderPictures(images)));
+  setFilterRandomClick(debounce(() => renderPictures(getRandomElements(images))));
+  setFilterDiscussedClick(debounce(() => renderPictures(getSortElements(images))));
 }, showAlert);
 
 setUploadFormSubmit(closeUploadModal);

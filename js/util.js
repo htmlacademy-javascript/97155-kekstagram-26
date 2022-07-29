@@ -82,6 +82,16 @@ const getActiveFilter = () => {
   });
 };
 
-export { getRandomInt, showAlert, getRandomElements, getSortElements, getActiveFilter };
+
+// функция для устранения дребезга
+function debounce (callback, timeoutDelay = 500) {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+}
+
+export { getRandomInt, showAlert, getRandomElements, getSortElements, getActiveFilter, debounce };
 
 
