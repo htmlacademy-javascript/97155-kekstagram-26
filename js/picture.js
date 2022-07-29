@@ -1,5 +1,4 @@
 import { renderBigPicture } from './big-picture.js';
-import { getSortElements } from './util.js';
 
 const renderPictures = (picturesData) => {
   // находим шаблон для одной картинки
