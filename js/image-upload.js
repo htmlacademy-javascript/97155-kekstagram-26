@@ -25,7 +25,10 @@ const closeUploadModal = () => {
   uploadModal.classList.add('hidden');
   body.classList.remove('modal-open');
   imagePreview.className = 'img-upload__preview';
+  imagePreview.style.removeProperty('transform');
+  document.removeEventListener('keydown', closeUploadModal);
 };
+
 
 // закрываем модалку редактирования изображения по клику на крестик
 uploadModalCloseButton.addEventListener('click', () => {
@@ -54,12 +57,12 @@ const pristine = new Pristine(imageUploadForm, {
   classTo: 'upload-image-form__element',
   errorTextParent: 'upload-image-form__element',
   errorTextClass: 'upload-image-form__error-text',
-}, false);
+}, true);
 
 // если что то было указано в инпуте хештегов, добавляем валидаторы
 uploadModalHashteg.addEventListener('change', () => {
 
-  // добавляем валидатор хештегов на соотвествие формату
+  // добавляем валидатор хештегов на соответствие формату
   pristine.addValidator(uploadModalHashteg, (value) => {
     const hashtegsArray = value.split(' ');
     const re = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;

@@ -84,7 +84,7 @@ const getActiveFilter = () => {
 
 
 // функция для устранения дребезга
-function debounce (callback, timeoutDelay = 500) {
+function debounce (callback, timeoutDelay) {
   let timeoutId;
   return (...rest) => {
     clearTimeout(timeoutId);
