@@ -14,12 +14,14 @@ import { getSortElements } from './util.js';
 import { getActiveFilter } from './util.js';
 import { debounce } from './util.js';
 
+const TIMEOUT_DELAY = 500;
+
 // получаем данные о картинках с сервера
 getData((images) => {
   renderPictures(images);
-  setFilterDefaultClick(debounce(() => renderPictures(images)));
-  setFilterRandomClick(debounce(() => renderPictures(getRandomElements(images))));
-  setFilterDiscussedClick(debounce(() => renderPictures(getSortElements(images))));
+  setFilterDefaultClick(debounce(() => renderPictures(images), TIMEOUT_DELAY));
+  setFilterRandomClick(debounce(() => renderPictures(getRandomElements(images)), TIMEOUT_DELAY));
+  setFilterDiscussedClick(debounce(() => renderPictures(getSortElements(images)), TIMEOUT_DELAY));
 }, showAlert);
 
 setUploadFormSubmit(closeUploadModal);
