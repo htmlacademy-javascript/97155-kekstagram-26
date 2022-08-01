@@ -9,6 +9,7 @@ import './image-upload.js';
 import './image-upload-scale.js';
 import './image-upload-filters.js';
 import './image-from-user.js';
+import './image-upload-messages.js';
 import { getRandomElements } from './util.js';
 import { getSortElements } from './util.js';
 import { getActiveFilter } from './util.js';
