@@ -30,6 +30,21 @@ const renderBigPicture = (picturesData) => {
     }
   };
 
+  // закрываем модалку по клику на крестик
+  const closeButton = document.querySelector('.big-picture__cancel');
+  const closeBigPictureModal = () => {
+    bigPicture.classList.add('hidden');
+    body.classList.remove('modal-open');
+  };
+
+  // закрываем модалку по нажатию Esc
+  const onKeydown = (evt) => {
+    if (evt.key === 'Escape') {
+      closeBigPictureModal();
+      document.removeEventListener('keydown', onKeydown);
+    }
+  };
+
   // при клике на маленькую картинку, заполняем данными модалку с большой картинкой
   smallPictures.forEach((picture, index) => {
     picture.addEventListener('click', () => {
@@ -37,6 +52,7 @@ const renderBigPicture = (picturesData) => {
       bigPicture.classList.remove('hidden');
       commentsLoader.classList.add('hidden');
       body.classList.add('modal-open');
+      document.addEventListener('keydown', onKeydown);
       bigPicture.querySelector('.big-picture__img img').src = picturesData[index].url;
       bigPicture.querySelector('.likes-count').textContent = picturesData[index].likes;
       allCommentsCount.textContent = picturesData[index].comments.length;
@@ -64,24 +80,11 @@ const renderBigPicture = (picturesData) => {
     });
   });
 
-  // закрываем модалку по клику на крестик
-  const closeButton = document.querySelector('.big-picture__cancel');
-  const closeBigPictureModal = () => {
-    bigPicture.classList.add('hidden');
-    body.classList.remove('modal-open');
-    document.removeEventListener('keydown', closeBigPictureModal);
-  };
 
   closeButton.addEventListener('click', () => {
     closeBigPictureModal();
   });
 
-  // закрываем модалку по нажатию Esc
-  document.addEventListener('keydown', (evt) => {
-    if (evt.keyCode === 27) {
-      closeBigPictureModal();
-    }
-  });
 };
 
 export { renderBigPicture };

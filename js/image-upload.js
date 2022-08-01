@@ -1,5 +1,6 @@
 import { sendData } from './api.js';
 import { showAlert } from './util.js';
+import { getSuccessMessage } from './image-upload-messages.js';
 
 const imageUploadForm = document.querySelector('.img-upload__form');
 const uploadModal = document.querySelector('.img-upload__overlay');
@@ -11,12 +12,6 @@ const uploadModalDescription = document.querySelector('.text__description');
 const imagePreview = document.querySelector('.img-upload__preview');
 const submitButton = document.querySelector('.img-upload__submit');
 
-// открываем модалку редактирования изображения
-uploadInput.addEventListener('change', () => {
-  uploadModal.classList.remove('hidden');
-  body.classList.add('modal-open');
-});
-
 // закрывает модалку, очищает поля формы
 const closeUploadModal = () => {
   uploadModalHashteg.value = '';
@@ -26,21 +21,28 @@ const closeUploadModal = () => {
   body.classList.remove('modal-open');
   imagePreview.className = 'img-upload__preview';
   imagePreview.style.removeProperty('transform');
-  document.removeEventListener('keydown', closeUploadModal);
 };
-
 
 // закрываем модалку редактирования изображения по клику на крестик
 uploadModalCloseButton.addEventListener('click', () => {
   closeUploadModal();
 });
 
-// закрываем модалку редактирования изображения по нажатию Esc
-document.addEventListener('keydown', (evt) => {
-  if (evt.keyCode === 27) {
+// закрываем модалку по нажатию Esc
+const onKeydown = (evt) => {
+  if (evt.key === 'Escape') {
     closeUploadModal();
+    document.removeEventListener('keydown', onKeydown);
   }
+};
+
+// открываем модалку редактирования изображения
+uploadInput.addEventListener('change', () => {
+  uploadModal.classList.remove('hidden');
+  body.classList.add('modal-open');
+  document.addEventListener('keydown', onKeydown);
 });
+
 
 // не закрываем модлаку по Esc если фокус на инпуте ввода хештега
 uploadModalHashteg.addEventListener('keydown', (evt) => {
@@ -126,6 +128,7 @@ const setUploadFormSubmit = (onSuccess) => {
         () => {
           onSuccess();
           unblockSubmitButton();
+          getSuccessMessage();
         },
         () => {
           showAlert('Не удалось отправить форму. Попробуйте ещё раз');
